@@ -1,58 +1,87 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <h1> Shopping List With Important Items</h1>
+  <div id = 'container'>
+    <form v-on:submit.prevent="addItem" class="fr">
+      <p> what do you need :<br>
+        <input type="text" placeholder="Enter item name " v-model="name">
+      </p>
+      <p>how many items : <br>
+        <input type="number" min='0' placeholder="number of items..." v-model="number">
+      </p>
+      <p>
+        <span>important?</span>
+        <input type="checkbox" v-model="important">
+        {{ important }}
+      </p>
+      <button type="submit">Add item</button>
+    </form><br>
+    <hr>
+    <div>
+      <strong> shopping list :-</strong>
+      <ul>
+        <li v-for="item in shoppingList" :key="item.name" style="font-size: x-large; background-color: aquamarine;">
+          {{ item.name }} ({{ item.number }} items) - {{ item.important ? 'Important' : 'Not Important' }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+import { ref, reactive } from 'vue';
+
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
+  setup() {
+    const name = ref("");
+    const number = ref(0);
+    const important = ref(false);
+
+    const shoppingList = reactive([]);
+
+    function addItem() {
+      shoppingList.push({
+        name: name.value,
+        number: number.value,
+        important: important.value
+      });
+
+     
+      name.value = "";
+      number.value = 0;
+      important.value = false;
+    }
+
+    return {
+      name,
+      number,
+      important,
+      shoppingList,
+      addItem
+    };
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.fr{
+  border-radius: 9px;
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  border: 3px solid grey;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #5fb98c;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+input{
+  padding: 8px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+h1{
+  background-color: #6eadbd;
 }
-a {
-  color: #42b983;
-}
+
 </style>
